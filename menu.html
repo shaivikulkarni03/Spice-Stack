@@ -1,0 +1,1417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Menu | SpiceStack</title>
+
+    <style>
+        /* ========== BASIC RESET ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fffaf5;
+            color: #35251e;
+            line-height: 1.6;
+        }
+
+        button, input, textarea {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* ========== NAVIGATION ========== */
+        .navbar {
+            background: #351e16;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            color: white;
+            font-size: 27px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #ff9b54;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ff9b54;
+        }
+
+        /* ========== MENU HERO ========== */
+        .menu-hero {
+            background:
+                linear-gradient(rgba(40, 20, 12, 0.72),
+                rgba(40, 20, 12, 0.72)),
+                url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1600&q=85");
+
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            color: white;
+            padding: 85px 20px;
+        }
+
+        .menu-hero h1 {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .menu-hero h1 span {
+            color: #ffad70;
+        }
+
+        .menu-hero p {
+            font-size: 17px;
+            color: #f3e5dc;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 7px 18px;
+            border-radius: 30px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        /* ========== PAGE INTRODUCTION ========== */
+        .intro {
+            text-align: center;
+            padding: 45px 20px 20px;
+        }
+
+        .intro h2 {
+            font-size: 30px;
+            color: #a84312;
+            margin-bottom: 8px;
+        }
+
+        .intro p {
+            color: #79685e;
+        }
+
+        /* ========== MAIN LAYOUT ========== */
+        .layout {
+            max-width: 1400px;
+            margin: auto;
+            padding: 30px 5% 70px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 340px;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .menu-side {
+            min-width: 0;
+        }
+
+        /* ========== SEARCH ========== */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 17px;
+            top: 13px;
+            font-size: 19px;
+        }
+
+        .search {
+            width: 100%;
+            padding: 14px 15px 14px 48px;
+            border: 1px solid #e4d4c9;
+            border-radius: 9px;
+            font-size: 15px;
+            background: white;
+            outline: none;
+        }
+
+        .search:focus {
+            border-color: #d35400;
+            box-shadow: 0 0 0 3px rgba(211,84,0,0.10);
+        }
+
+        /* ========== FILTERS ========== */
+        .filter-heading {
+            font-size: 15px;
+            margin: 18px 0 10px;
+            color: #49352b;
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-bottom: 22px;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid #e4d4c9;
+            color: #684d3f;
+            padding: 9px 17px;
+            border-radius: 25px;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: #d35400;
+            color: #d35400;
+        }
+
+        .filter-btn.active {
+            background: #d35400;
+            border-color: #d35400;
+            color: white;
+        }
+
+        /* ========== MENU HEADING ========== */
+        .menu-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0 18px;
+        }
+
+        .menu-heading h2 {
+            font-size: 23px;
+            color: #49352b;
+        }
+
+        .menu-heading span {
+            color: #89766b;
+            font-size: 13px;
+        }
+
+        /* ========== DISH GRID ========== */
+        .dish-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .dish {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #f0e6df;
+            box-shadow: 0 4px 15px rgba(55,30,20,0.06);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dish:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 24px rgba(55,30,20,0.12);
+        }
+
+        .dish-image {
+            height: 165px;
+            background: #f5e9df;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 65px;
+        }
+
+        .dish-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .dish-content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .dish-tags {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .tag-veg {
+            color: #238b50;
+        }
+
+        .tag-nonveg {
+            color: #c0392b;
+        }
+
+        .tag-spicy {
+            color: #d97706;
+        }
+
+        .dish h3 {
+            font-size: 17px;
+            margin-bottom: 5px;
+            color: #39271e;
+        }
+
+        .dish-info {
+            color: #89766b;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .dish-bottom {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #a84312;
+        }
+
+        .add-btn {
+            background: #d35400;
+            border: none;
+            color: white;
+            padding: 9px 13px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #a84312;
+        }
+
+        .no-results {
+            background: white;
+            border-radius: 10px;
+            padding: 35px;
+            text-align: center;
+            color: #79685e;
+            grid-column: 1 / -1;
+        }
+
+        /* ========== CART ========== */
+        .cart-side {
+            position: sticky;
+            top: 90px;
+        }
+
+        .cart {
+            background: white;
+            padding: 22px;
+            border-radius: 13px;
+            border: 1px solid #f0e6df;
+            box-shadow: 0 5px 20px rgba(55,30,20,0.08);
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee4dc;
+        }
+
+        .cart-header h2 {
+            color: #a84312;
+            font-size: 22px;
+        }
+
+        .cart-count {
+            background: #fff0e5;
+            color: #a84312;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 30px 10px;
+            color: #96877e;
+        }
+
+        .empty-cart div {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .cart-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0e9e4;
+        }
+
+        .cart-item-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .cart-item-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-btn {
+            width: 27px;
+            height: 27px;
+            border: none;
+            background: #fff0e5;
+            color: #a84312;
+            border-radius: 50%;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .qty-btn:hover {
+            background: #d35400;
+            color: white;
+        }
+
+        .item-total {
+            font-weight: bold;
+            color: #49352b;
+            font-size: 13px;
+        }
+
+        /* ========== SPECIAL NOTES ========== */
+        .notes-label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 18px 0 8px;
+        }
+
+        .notes {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #e4d4c9;
+            border-radius: 7px;
+            resize: vertical;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .notes:focus {
+            border-color: #d35400;
+        }
+
+        /* ========== BILL ========== */
+        .bill {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid #eee4dc;
+        }
+
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            color: #76645b;
+            font-size: 13px;
+        }
+
+        .bill-total {
+            color: #35251e;
+            font-size: 18px;
+            font-weight: bold;
+            border-top: 1px solid #eee4dc;
+            margin-top: 8px;
+            padding-top: 14px;
+        }
+
+        .tax-note {
+            font-size: 11px;
+            color: #99887e;
+            margin-top: 8px;
+        }
+
+        /* ========== CART BUTTONS ========== */
+        .cart-btn {
+            width: 100%;
+            padding: 13px;
+            background: #d35400;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 17px;
+            transition: 0.2s;
+        }
+
+        .cart-btn:hover {
+            background: #a84312;
+        }
+
+        .cart-btn:disabled {
+            background: #c9bdb5;
+            cursor: not-allowed;
+        }
+
+        .clear-btn {
+            width: 100%;
+            background: white;
+            color: #a84312;
+            border: 1px solid #d9b8a5;
+            padding: 10px;
+            border-radius: 7px;
+            margin-top: 9px;
+            font-size: 13px;
+        }
+
+        .clear-btn:hover {
+            background: #fff0e5;
+        }
+
+        /* ========== INFORMATION BANNER ========== */
+        .info-banner {
+            background: #f8eee5;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        .info-banner h2 {
+            color: #a84312;
+            margin-bottom: 8px;
+        }
+
+        .info-banner p {
+            color: #79685e;
+            font-size: 14px;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: #21140f;
+            color: white;
+            padding: 35px 7% 20px;
+            text-align: center;
+        }
+
+        footer h3 {
+            color: #ff9b54;
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            color: #d8c9c0;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        footer a {
+            color: #ffad70;
+            text-decoration: none;
+        }
+
+        .copyright {
+            border-top: 1px solid #59443a;
+            margin-top: 20px;
+            padding-top: 17px;
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 1100px) {
+            .dish-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .layout {
+                grid-template-columns: minmax(0, 1fr) 310px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-side {
+                position: static;
+            }
+
+            .nav-links {
+                gap: 13px;
+            }
+
+            .navbar {
+                padding: 17px 5%;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .navbar {
+                flex-direction: column;
+                gap: 13px;
+            }
+
+            .nav-links {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .menu-hero h1 {
+                font-size: 35px;
+            }
+
+            .dish-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dish-image {
+                height: 210px;
+            }
+
+            .layout {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .menu-heading {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            Spice<span>Stack</span>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="menu.html" class="active">Menu</a></li>
+            <li><a href="reserve.html">Reserve</a></li>
+            <li><a href="my-reservations.html">My Reservations</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+
+    </nav>
+
+
+    <!-- ========== HERO ========== -->
+    <header class="menu-hero">
+
+        <div class="hero-tag">FRESH FOOD • GREAT TASTE</div>
+
+        <h1>Explore Our <span>Menu</span></h1>
+
+        <p>
+            Discover delicious dishes, choose your favourites
+            and plan your meal before you arrive.
+        </p>
+
+    </header>
+
+
+    <!-- ========== INTRODUCTION ========== -->
+    <div class="intro">
+        <h2>Something Delicious Awaits</h2>
+        <p>Browse our menu and build your perfect meal.</p>
+    </div>
+
+
+    <!-- ========== MAIN LAYOUT ========== -->
+    <main class="layout">
+
+        <!-- LEFT: MENU -->
+        <div class="menu-side">
+
+            <!-- SEARCH -->
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input
+                    type="text"
+                    id="searchBox"
+                    class="search"
+                    placeholder="Search for your favourite dish..."
+                >
+            </div>
+
+
+            <!-- CATEGORY FILTERS -->
+            <h3 class="filter-heading">Browse Categories</h3>
+
+            <div class="filters" id="categoryFilters">
+
+                <button class="filter-btn active" data-category="All">All</button>
+
+                <button class="filter-btn" data-category="Starters">Starters</button>
+
+                <button class="filter-btn" data-category="Mains">Main Course</button>
+
+                <button class="filter-btn" data-category="Breads & Rice">Breads & Rice</button>
+
+                <button class="filter-btn" data-category="Desserts">Desserts</button>
+
+                <button class="filter-btn" data-category="Drinks">Drinks</button>
+
+            </div>
+
+
+            <!-- DIET FILTERS -->
+            <h3 class="filter-heading">Food Preferences</h3>
+
+            <div class="filters" id="dietFilters">
+
+                <button class="filter-btn active" data-diet="All">All Food</button>
+
+                <button class="filter-btn" data-diet="Veg">Vegetarian</button>
+
+                <button class="filter-btn" data-diet="NonVeg">Non-Vegetarian</button>
+
+                <button class="filter-btn" data-diet="Spicy">Spicy</button>
+
+            </div>
+
+
+            <!-- DISHES -->
+            <div class="menu-heading">
+                <h2>Our Dishes</h2>
+                <span id="dishCount">25 dishes available</span>
+            </div>
+
+            <div class="dish-grid" id="dishGrid"></div>
+
+        </div>
+
+
+        <!-- RIGHT: CART -->
+        <aside class="cart-side">
+
+            <div class="cart">
+
+                <div class="cart-header">
+                    <h2>Your Order</h2>
+                    <span class="cart-count" id="cartCount">0 Items</span>
+                </div>
+
+                <div id="emptyCart" class="empty-cart">
+                    <div>🛒</div>
+                    <p>Your cart is empty.</p>
+                    <small>Add something delicious!</small>
+                </div>
+
+                <div id="cartItems"></div>
+
+
+                <!-- SPECIAL NOTES -->
+                <label for="notes" class="notes-label">
+                    Special Requests
+                </label>
+
+                <textarea
+                    id="notes"
+                    class="notes"
+                    rows="3"
+                    placeholder="Allergies or special requests (optional)"
+                ></textarea>
+
+
+                <!-- BILL -->
+                <div class="bill">
+
+                    <div class="bill-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₹0.00</span>
+                    </div>
+
+                    <div class="bill-row">
+                        <span>GST (5%)</span>
+                        <span id="gst">₹0.00</span>
+                    </div>
+
+                    <div class="bill-row">
+                        <span>Service Charge (10%)</span>
+                        <span id="service">₹0.00</span>
+                    </div>
+
+                    <div class="bill-row bill-total">
+                        <span>Total</span>
+                        <span id="total">₹0.00</span>
+                    </div>
+
+                    <p class="tax-note">
+                        Sample billing calculation for this project.
+                    </p>
+
+                </div>
+
+
+                <!-- ACTION BUTTONS -->
+                <button class="cart-btn" id="confirmBtn" disabled>
+                    Confirm Pre-Order
+                </button>
+
+                <button class="clear-btn" id="clearBtn">
+                    Clear Cart
+                </button>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- ========== INFORMATION BANNER ========== -->
+    <section class="info-banner">
+
+        <h2>Plan Ahead. Dine Better.</h2>
+
+        <p>
+            Select your favourite dishes and reserve your table
+            for a smoother dining experience.
+        </p>
+
+    </section>
+
+
+    <!-- ========== FOOTER ========== -->
+    <footer>
+
+        <h3>SpiceStack</h3>
+
+        <p>
+            Your table is ready. So is your food.
+        </p>
+
+        <p>
+            <a href="index.html">Home</a> |
+            <a href="reserve.html">Reservations</a> |
+            <a href="my-reservations.html">My Reservations</a>
+        </p>
+
+        <div class="copyright">
+            <p>© 2026 SpiceStack TableTurn. All Rights Reserved.</p>
+        </div>
+
+    </footer>
+
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+
+        /* ==========================================
+           1. DISH DATABASE
+           ========================================== */
+
+        var dishes = [
+
+            // STARTERS
+            {id:1, name:"Paneer Tikka", category:"Starters", diet:"Veg", spicy:true, price:240, prep:15, emoji:"🧀"},
+            {id:2, name:"Chicken 65", category:"Starters", diet:"NonVeg", spicy:true, price:280, prep:15, emoji:"🍗"},
+            {id:3, name:"Veg Spring Rolls", category:"Starters", diet:"Veg", spicy:false, price:180, prep:10, emoji:"🥟"},
+            {id:4, name:"Fish Fingers", category:"Starters", diet:"NonVeg", spicy:false, price:300, prep:12, emoji:"🐟"},
+            {id:5, name:"Hara Bhara Kebab", category:"Starters", diet:"Veg", spicy:false, price:220, prep:12, emoji:"🥬"},
+            {id:6, name:"Tandoori Chicken", category:"Starters", diet:"NonVeg", spicy:true, price:340, prep:20, emoji:"🍖"},
+
+            // MAIN COURSE
+            {id:7, name:"Butter Chicken", category:"Mains", diet:"NonVeg", spicy:false, price:320, prep:20, emoji:"🍛"},
+            {id:8, name:"Dal Makhani", category:"Mains", diet:"Veg", spicy:false, price:220, prep:20, emoji:"🍲"},
+            {id:9, name:"Palak Paneer", category:"Mains", diet:"Veg", spicy:false, price:240, prep:18, emoji:"🥘"},
+            {id:10, name:"Mutton Rogan Josh", category:"Mains", diet:"NonVeg", spicy:true, price:420, prep:25, emoji:"🍖"},
+            {id:11, name:"Chicken Tikka Masala", category:"Mains", diet:"NonVeg", spicy:true, price:330, prep:20, emoji:"🍛"},
+            {id:12, name:"Chole Masala", category:"Mains", diet:"Veg", spicy:true, price:200, prep:15, emoji:"🫘"},
+            {id:13, name:"Grilled Chicken Steak", category:"Mains", diet:"NonVeg", spicy:false, price:450, prep:25, emoji:"🥩"},
+            {id:14, name:"Pasta Alfredo", category:"Mains", diet:"Veg", spicy:false, price:290, prep:15, emoji:"🍝"},
+
+            // BREADS AND RICE
+            {id:15, name:"Chicken Biryani", category:"Breads & Rice", diet:"NonVeg", spicy:true, price:280, prep:20, emoji:"🍚"},
+            {id:16, name:"Veg Biryani", category:"Breads & Rice", diet:"Veg", spicy:false, price:240, prep:20, emoji:"🍚"},
+            {id:17, name:"Butter Naan", category:"Breads & Rice", diet:"Veg", spicy:false, price:50, prep:10, emoji:"🫓"},
+            {id:18, name:"Garlic Naan", category:"Breads & Rice", diet:"Veg", spicy:false, price:60, prep:10, emoji:"🫓"},
+            {id:19, name:"Jeera Rice", category:"Breads & Rice", diet:"Veg", spicy:false, price:130, prep:10, emoji:"🍚"},
+
+            // DESSERTS
+            {id:20, name:"Gulab Jamun", category:"Desserts", diet:"Veg", spicy:false, price:120, prep:10, emoji:"🍮"},
+            {id:21, name:"Brownie with Ice Cream", category:"Desserts", diet:"Veg", spicy:false, price:180, prep:10, emoji:"🍫"},
+            {id:22, name:"Rasmalai", category:"Desserts", diet:"Veg", spicy:false, price:140, prep:10, emoji:"🍨"},
+
+            // DRINKS
+            {id:23, name:"Masala Chai", category:"Drinks", diet:"Veg", spicy:false, price:50, prep:10, emoji:"☕"},
+            {id:24, name:"Sweet Lassi", category:"Drinks", diet:"Veg", spicy:false, price:90, prep:10, emoji:"🥛"},
+            {id:25, name:"Fresh Lime Soda", category:"Drinks", diet:"Veg", spicy:false, price:80, prep:10, emoji:"🍋"}
+
+        ];
+
+
+        /* ==========================================
+           2. CART AND FILTER VARIABLES
+           ========================================== */
+
+        var cart = {};
+
+        var selectedCategory = "All";
+
+        var selectedDiet = "All";
+
+        var searchText = "";
+
+
+        /* ==========================================
+           3. DISPLAY DISHES
+           ========================================== */
+
+        function showDishes() {
+
+            var html = "";
+
+            var count = 0;
+
+            for (var i = 0; i < dishes.length; i++) {
+
+                var d = dishes[i];
+
+                // CATEGORY FILTER
+                if (
+                    selectedCategory !== "All" &&
+                    d.category !== selectedCategory
+                ) {
+                    continue;
+                }
+
+                // DIET FILTER
+                if (
+                    selectedDiet === "Veg" &&
+                    d.diet !== "Veg"
+                ) {
+                    continue;
+                }
+
+                if (
+                    selectedDiet === "NonVeg" &&
+                    d.diet !== "NonVeg"
+                ) {
+                    continue;
+                }
+
+                if (
+                    selectedDiet === "Spicy" &&
+                    d.spicy !== true
+                ) {
+                    continue;
+                }
+
+                // SEARCH FILTER
+                if (
+                    !d.name.toLowerCase().includes(searchText)
+                ) {
+                    continue;
+                }
+
+                count++;
+
+                var dietClass =
+                    d.diet === "Veg" ? "tag-veg" : "tag-nonveg";
+
+                var dietLabel =
+                    d.diet === "Veg" ? "● VEG" : "● NON-VEG";
+
+                var spicyTag = d.spicy
+                    ? '<span class="tag-spicy">🌶 SPICY</span>'
+                    : "";
+
+                html += `
+                    <div class="dish">
+
+                        <div class="dish-image">
+                            ${d.emoji}
+                        </div>
+
+                        <div class="dish-content">
+
+                            <div class="dish-tags">
+                                <span class="${dietClass}">
+                                    ${dietLabel}
+                                </span>
+
+                                ${spicyTag}
+                            </div>
+
+                            <h3>${d.name}</h3>
+
+                            <p class="dish-info">
+                                Preparation time: ${d.prep} min
+                            </p>
+
+                            <div class="dish-bottom">
+
+                                <span class="price">
+                                    ₹${d.price}
+                                </span>
+
+                                <button
+                                    class="add-btn"
+                                    data-add="${d.id}"
+                                >
+                                    + Add
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+            }
+
+            if (count === 0) {
+
+                html = `
+                    <div class="no-results">
+                        <h3>No dishes found</h3>
+                        <p>Try changing your search or filters.</p>
+                    </div>
+                `;
+
+            }
+
+            document.getElementById("dishGrid").innerHTML = html;
+
+            document.getElementById("dishCount").innerText =
+                count + (count === 1 ? " dish found" : " dishes found");
+
+        }
+
+
+        /* ==========================================
+           4. DISPLAY CART AND CALCULATE BILL
+           ========================================== */
+
+        function showCart() {
+
+            var html = "";
+
+            var subtotal = 0;
+
+            var itemCount = 0;
+
+            for (var i = 0; i < dishes.length; i++) {
+
+                var d = dishes[i];
+
+                var qty = cart[d.id] || 0;
+
+                if (qty > 0) {
+
+                    var lineTotal = d.price * qty;
+
+                    subtotal += lineTotal;
+
+                    itemCount += qty;
+
+                    html += `
+                        <div class="cart-item">
+
+                            <div class="cart-item-top">
+                                <span>${d.name}</span>
+                                <span>₹${d.price} each</span>
+                            </div>
+
+                            <div class="cart-item-bottom">
+
+                                <div class="quantity-controls">
+
+                                    <button
+                                        class="qty-btn"
+                                        data-minus="${d.id}"
+                                        aria-label="Decrease ${d.name} quantity"
+                                    >
+                                        −
+                                    </button>
+
+                                    <span>${qty}</span>
+
+                                    <button
+                                        class="qty-btn"
+                                        data-plus="${d.id}"
+                                        aria-label="Increase ${d.name} quantity"
+                                    >
+                                        +
+                                    </button>
+
+                                </div>
+
+                                <span class="item-total">
+                                    ₹${lineTotal.toFixed(2)}
+                                </span>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                }
+
+            }
+
+            document.getElementById("cartItems").innerHTML = html;
+
+            document.getElementById("emptyCart").style.display =
+                itemCount === 0 ? "block" : "none";
+
+            document.getElementById("cartCount").innerText =
+                itemCount + (itemCount === 1 ? " Item" : " Items");
+
+
+            // BILL CALCULATION
+
+            var gst = subtotal * 0.05;
+
+            var service = subtotal * 0.10;
+
+            var total = subtotal + gst + service;
+
+
+            document.getElementById("subtotal").innerText =
+                "₹" + subtotal.toFixed(2);
+
+            document.getElementById("gst").innerText =
+                "₹" + gst.toFixed(2);
+
+            document.getElementById("service").innerText =
+                "₹" + service.toFixed(2);
+
+            document.getElementById("total").innerText =
+                "₹" + total.toFixed(2);
+
+
+            // DISABLE CONFIRM BUTTON WHEN CART IS EMPTY
+
+            document.getElementById("confirmBtn").disabled =
+                itemCount === 0;
+
+        }
+
+
+        /* ==========================================
+           5. ADD DISH TO CART
+           ========================================== */
+
+        document.getElementById("dishGrid").addEventListener(
+            "click",
+            function(event) {
+
+                var id = event.target.getAttribute("data-add");
+
+                if (id) {
+
+                    cart[id] = (cart[id] || 0) + 1;
+
+                    showCart();
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+           6. INCREASE OR DECREASE QUANTITY
+           ========================================== */
+
+        document.getElementById("cartItems").addEventListener(
+            "click",
+            function(event) {
+
+                var plusId = event.target.getAttribute("data-plus");
+
+                var minusId = event.target.getAttribute("data-minus");
+
+
+                if (plusId) {
+
+                    cart[plusId] = (cart[plusId] || 0) + 1;
+
+                }
+
+
+                if (minusId) {
+
+                    cart[minusId]--;
+
+                    if (cart[minusId] <= 0) {
+
+                        delete cart[minusId];
+
+                    }
+
+                }
+
+                showCart();
+
+            }
+        );
+
+
+        /* ==========================================
+           7. CATEGORY FILTERS
+           ========================================== */
+
+        document.getElementById("categoryFilters").addEventListener(
+            "click",
+            function(event) {
+
+                var category = event.target.getAttribute("data-category");
+
+                if (!category) return;
+
+                selectedCategory = category;
+
+                var buttons = document.querySelectorAll(
+                    "#categoryFilters .filter-btn"
+                );
+
+                for (var i = 0; i < buttons.length; i++) {
+
+                    buttons[i].classList.remove("active");
+
+                }
+
+                event.target.classList.add("active");
+
+                showDishes();
+
+            }
+        );
+
+
+        /* ==========================================
+           8. DIET FILTERS
+           ========================================== */
+
+        document.getElementById("dietFilters").addEventListener(
+            "click",
+            function(event) {
+
+                var diet = event.target.getAttribute("data-diet");
+
+                if (!diet) return;
+
+                selectedDiet = diet;
+
+                var buttons = document.querySelectorAll(
+                    "#dietFilters .filter-btn"
+                );
+
+                for (var i = 0; i < buttons.length; i++) {
+
+                    buttons[i].classList.remove("active");
+
+                }
+
+                event.target.classList.add("active");
+
+                showDishes();
+
+            }
+        );
+
+
+        /* ==========================================
+           9. SEARCH FUNCTION
+           ========================================== */
+
+        document.getElementById("searchBox").addEventListener(
+            "input",
+            function(event) {
+
+                searchText = event.target.value.toLowerCase().trim();
+
+                showDishes();
+
+            }
+        );
+
+
+        /* ==========================================
+           10. CLEAR CART
+           ========================================== */
+
+        document.getElementById("clearBtn").addEventListener(
+            "click",
+            function() {
+
+                cart = {};
+
+                document.getElementById("notes").value = "";
+
+                showCart();
+
+            }
+        );
+
+
+        /* ==========================================
+           11. CONFIRM PRE-ORDER
+           ========================================== */
+
+        document.getElementById("confirmBtn").addEventListener(
+            "click",
+            function() {
+
+                if (Object.keys(cart).length === 0) {
+
+                    alert("Please add at least one dish first.");
+
+                    return;
+
+                }
+
+                var orderItems = [];
+
+                var subtotal = 0;
+
+                for (var i = 0; i < dishes.length; i++) {
+
+                    var d = dishes[i];
+
+                    var qty = cart[d.id] || 0;
+
+                    if (qty > 0) {
+
+                        orderItems.push({
+                            id: d.id,
+                            name: d.name,
+                            price: d.price,
+                            quantity: qty,
+                            amount: d.price * qty
+                        });
+
+                        subtotal += d.price * qty;
+
+                    }
+
+                }
+
+                var gst = subtotal * 0.05;
+
+                var service = subtotal * 0.10;
+
+                var order = {
+
+                    items: orderItems,
+
+                    notes: document.getElementById("notes").value,
+
+                    subtotal: subtotal,
+
+                    gst: gst,
+
+                    serviceCharge: service,
+
+                    total: subtotal + gst + service,
+
+                    createdAt: new Date().toISOString()
+
+                };
+
+
+                try {
+
+                    localStorage.setItem(
+                        "preOrder",
+                        JSON.stringify(order)
+                    );
+
+                    alert(
+                        "Your pre-order has been saved! You can now reserve your table."
+                    );
+
+                    window.location.href = "reserve.html";
+
+                } catch (error) {
+
+                    alert(
+                        "Unable to save your order in this browser. Please try again."
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+           12. INITIAL PAGE LOAD
+           ========================================== */
+
+        showDishes();
+
+        showCart();
+
+    </script>
+
+</body>
+</html>

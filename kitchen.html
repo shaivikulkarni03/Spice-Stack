@@ -1,0 +1,1079 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kitchen Display - SpiceStack</title>
+
+  <style>
+    /* ---------- 1. BASIC RESET ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #15110f;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    /* ---------- 2. TOP NAVIGATION ---------- */
+    .topbar {
+      background: #241710;
+      padding: 18px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      border-bottom: 3px solid #c45b24;
+    }
+
+    .logo {
+      color: #f4a261;
+      font-size: 25px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .topbar h1 {
+      font-size: 23px;
+      margin-top: 5px;
+    }
+
+    .top-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .top-links a {
+      color: #f1dfd2;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .top-links a:hover,
+    .top-links a.active {
+      color: #f4a261;
+    }
+
+    /* ---------- 3. CLOCK ---------- */
+    .clock-box {
+      text-align: right;
+    }
+
+    .clock {
+      font-size: 27px;
+      font-weight: bold;
+      color: #f4a261;
+    }
+
+    .clock-label {
+      color: #bca99c;
+      font-size: 12px;
+    }
+
+    /* ---------- 4. CONTROL PANEL ---------- */
+    .controls {
+      padding: 20px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      border-bottom: 1px solid #352820;
+    }
+
+    .legend {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 13px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #111;
+    }
+
+    .pending {
+      background: #f1c40f;
+    }
+
+    .cooking {
+      background: #2ecc71;
+    }
+
+    .plated {
+      background: #3498db;
+    }
+
+    .priority {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .control-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      background: #44332a;
+      color: white;
+      border: 1px solid #695044;
+      padding: 10px 15px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .small-btn:hover {
+      background: #68432e;
+    }
+
+    .small-btn.primary {
+      background: #bd5722;
+      border-color: #bd5722;
+    }
+
+    .small-btn.primary:hover {
+      background: #963e16;
+    }
+
+    /* ---------- 5. DASHBOARD SUMMARY ---------- */
+    .summary {
+      padding: 20px 5% 5px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .summary-card {
+      background: #241d19;
+      border: 1px solid #42332a;
+      border-radius: 10px;
+      padding: 14px 22px;
+      min-width: 125px;
+    }
+
+    .summary-card span {
+      display: block;
+      color: #bca99c;
+      font-size: 12px;
+    }
+
+    .summary-card strong {
+      display: block;
+      color: #f4a261;
+      font-size: 23px;
+      margin-top: 4px;
+    }
+
+    /* ---------- 6. KITCHEN BOARD ---------- */
+    .board-heading {
+      padding: 25px 5% 10px;
+    }
+
+    .board-heading h2 {
+      font-size: 22px;
+      color: #f4a261;
+    }
+
+    .board-heading p {
+      color: #a99a90;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+      padding: 15px 5% 45px;
+      align-items: start;
+    }
+
+    /* ---------- 7. ORDER TICKET ---------- */
+    .ticket {
+      background: #241d19;
+      border: 1px solid #42332a;
+      border-top: 7px solid #f1c40f;
+      border-radius: 11px;
+      padding: 18px;
+      transition: 0.3s;
+    }
+
+    .ticket.cooking {
+      border-top-color: #2ecc71;
+      background: #20251f;
+    }
+
+    .ticket.plated {
+      border-top-color: #3498db;
+      opacity: 0.75;
+    }
+
+    .ticket.arrived-ticket {
+      box-shadow: 0 0 0 2px #e74c3c;
+    }
+
+    .ticket-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .ticket-head h2 {
+      font-size: 25px;
+      color: #f4a261;
+    }
+
+    .booking-id {
+      font-size: 11px;
+      color: #bca99c;
+      margin-top: 3px;
+    }
+
+    .guest {
+      font-size: 15px;
+      color: #ffffff;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .arrival {
+      color: #c7b7aa;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .priority-tag {
+      display: inline-block;
+      background: #a82d25;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    /* ---------- 8. COUNTDOWN ---------- */
+    .countdown {
+      background: #352a1c;
+      color: #f4c95d;
+      padding: 11px;
+      border-radius: 7px;
+      font-size: 14px;
+      margin-bottom: 13px;
+    }
+
+    .fire-alert {
+      background: #f39c12;
+      color: #21170d;
+      font-weight: bold;
+      text-align: center;
+      padding: 12px;
+      border-radius: 7px;
+      margin-bottom: 13px;
+      animation: flash 1.2s infinite;
+    }
+
+    @keyframes flash {
+      0%, 100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.65;
+      }
+    }
+
+    /* ---------- 9. DISH DETAILS ---------- */
+    .items-heading {
+      color: #f4a261;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .items {
+      list-style: none;
+      margin-bottom: 14px;
+    }
+
+    .items li {
+      padding: 9px 0;
+      border-bottom: 1px solid #40332b;
+      font-size: 15px;
+    }
+
+    .dish-name {
+      font-weight: bold;
+    }
+
+    .prep {
+      display: block;
+      color: #a99a90;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    /* ---------- 10. SPECIAL NOTES ---------- */
+    .notes {
+      background: #482b24;
+      border-left: 4px solid #e67e22;
+      color: #ffd3bd;
+      padding: 11px;
+      border-radius: 5px;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    /* ---------- 11. TICKET ACTIONS ---------- */
+    .ticket-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .ticket-buttons button {
+      flex: 1;
+      min-width: 100px;
+      padding: 11px 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-cook {
+      background: #2ecc71;
+      color: #102015;
+    }
+
+    .btn-ready {
+      background: #3498db;
+      color: white;
+    }
+
+    .btn-arrived {
+      background: #f1c40f;
+      color: #211a0d;
+    }
+
+    .btn-remove {
+      background: #554943;
+      color: white;
+    }
+
+    .ticket-buttons button:hover {
+      filter: brightness(0.85);
+    }
+
+    /* ---------- 12. EMPTY MESSAGE ---------- */
+    .empty-message {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 55px 20px;
+      color: #a99a90;
+      background: #241d19;
+      border: 1px solid #42332a;
+      border-radius: 12px;
+    }
+
+    .empty-message span {
+      display: block;
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    /* ---------- 13. FOOTER ---------- */
+    footer {
+      background: #241710;
+      border-top: 2px solid #c45b24;
+      padding: 22px;
+      text-align: center;
+      color: #bca99c;
+      font-size: 13px;
+    }
+
+    /* ---------- 14. RESPONSIVE DESIGN ---------- */
+    @media (max-width: 650px) {
+      .topbar {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .top-links {
+        justify-content: center;
+      }
+
+      .clock-box {
+        text-align: center;
+        width: 100%;
+      }
+
+      .controls {
+        justify-content: center;
+      }
+
+      .board {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fire-alert {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========== TOP NAVIGATION ========== -->
+  <header class="topbar">
+
+    <div>
+      <a href="index.html" class="logo">SpiceStack</a>
+      <h1>Kitchen Display System</h1>
+    </div>
+
+    <nav class="top-links">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="hostess.html">Hostess Desk</a>
+      <a href="kitchen.html" class="active">Kitchen</a>
+      <a href="analytics.html">Analytics</a>
+    </nav>
+
+    <div class="clock-box">
+      <div class="clock" id="clock">--:--:--</div>
+      <div class="clock-label">LIVE KITCHEN CLOCK</div>
+    </div>
+
+  </header>
+
+  <!-- ========== STATUS LEGEND AND CONTROLS ========== -->
+  <section class="controls">
+
+    <div class="legend">
+      <span class="badge pending">Pending</span>
+      <span class="badge cooking">Cooking</span>
+      <span class="badge plated">Plated</span>
+      <span class="badge priority">Priority</span>
+    </div>
+
+    <div class="control-buttons">
+      <button class="small-btn primary" id="addDemoBtn">
+        + Add Demo Order
+      </button>
+
+      <button class="small-btn" id="resetBtn">
+        Reset Demo Orders
+      </button>
+    </div>
+
+  </section>
+
+  <!-- ========== SUMMARY ========== -->
+  <section class="summary">
+
+    <div class="summary-card">
+      <span>Active Orders</span>
+      <strong id="activeCount">0</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Pending</span>
+      <strong id="pendingCount">0</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Cooking</span>
+      <strong id="cookingCount">0</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Plated</span>
+      <strong id="platedCount">0</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Priority Orders</span>
+      <strong id="priorityCount">0</strong>
+    </div>
+
+  </section>
+
+  <!-- ========== ORDER BOARD ========== -->
+  <section>
+
+    <div class="board-heading">
+      <h2>Kitchen Order Queue</h2>
+      <p>Monitor incoming pre-orders and update preparation status.</p>
+    </div>
+
+    <div class="board" id="board"></div>
+
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <p>© 2026 SpiceStack. All Rights Reserved.</p>
+    <p>Fresh food. Perfect timing. Great service.</p>
+  </footer>
+
+
+  <!-- ========== JAVASCRIPT ========== -->
+  <script>
+
+    /* =========================================
+       STEP 1: STORAGE FUNCTIONS
+    ========================================= */
+
+    const STORAGE_KEY = "kitchenTickets";
+
+    let tickets = [];
+
+    function loadTickets() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+        tickets = Array.isArray(saved)
+          ? saved.filter(function(ticket) {
+              return ticket &&
+                typeof ticket === "object" &&
+                Array.isArray(ticket.items);
+            })
+          : [];
+
+      } catch (error) {
+        tickets = [];
+      }
+    }
+
+    function saveTickets() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets));
+    }
+
+
+    /* =========================================
+       STEP 2: HELPER FUNCTIONS
+    ========================================= */
+
+    function safe(value) {
+      return String(value ?? "").replace(/[&<>"']/g, function(character) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[character];
+      });
+    }
+
+    const MINUTE = 60 * 1000;
+
+    function formatTime(ms) {
+      const time = Number(ms);
+
+      if (!Number.isFinite(time)) {
+        return "Not specified";
+      }
+
+      return new Date(time).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function formatCountdown(ms) {
+      const totalSeconds = Math.floor(Math.abs(ms) / 1000);
+
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+
+      return minutes + ":" + String(seconds).padStart(2, "0");
+    }
+
+    function getArrival(ticket) {
+      const arrival = Number(ticket.arrival);
+
+      return Number.isFinite(arrival) ? arrival : Date.now();
+    }
+
+    function getLongestPrep(ticket) {
+      return ticket.items.reduce(function(longest, item) {
+        const prep = Number(item.prep) || 0;
+        return Math.max(longest, prep);
+      }, 0);
+    }
+
+    function getFireTime(ticket) {
+      return getArrival(ticket) - getLongestPrep(ticket) * MINUTE;
+    }
+
+
+    /* =========================================
+       STEP 3: SORT TICKETS
+    ========================================= */
+
+    function sortTickets(a, b) {
+
+      // Plated tickets go to the bottom.
+      if (a.status === "plated" && b.status !== "plated") return 1;
+      if (b.status === "plated" && a.status !== "plated") return -1;
+
+      // Arrived guests receive priority.
+      if (a.arrived && !b.arrived) return -1;
+      if (b.arrived && !a.arrived) return 1;
+
+      // Earlier cooking time comes first.
+      return getFireTime(a) - getFireTime(b);
+    }
+
+
+    /* =========================================
+       STEP 4: SUMMARY COUNTS
+    ========================================= */
+
+    function updateSummary() {
+
+      const active = tickets.filter(function(t) {
+        return t.status !== "plated";
+      }).length;
+
+      const pending = tickets.filter(function(t) {
+        return t.status === "pending";
+      }).length;
+
+      const cooking = tickets.filter(function(t) {
+        return t.status === "cooking";
+      }).length;
+
+      const plated = tickets.filter(function(t) {
+        return t.status === "plated";
+      }).length;
+
+      const priority = tickets.filter(function(t) {
+        return t.arrived && t.status !== "plated";
+      }).length;
+
+      document.getElementById("activeCount").textContent = active;
+      document.getElementById("pendingCount").textContent = pending;
+      document.getElementById("cookingCount").textContent = cooking;
+      document.getElementById("platedCount").textContent = plated;
+      document.getElementById("priorityCount").textContent = priority;
+    }
+
+
+    /* =========================================
+       STEP 5: CREATE DISH LIST
+    ========================================= */
+
+    function createItemsHTML(items) {
+
+      if (!Array.isArray(items) || items.length === 0) {
+        return "<li>No dish details available</li>";
+      }
+
+      return items.map(function(item) {
+
+        const name = safe(item.name || "Dish");
+        const quantity = Math.max(1, Number(item.qty ?? item.quantity) || 1);
+        const prep = Number(item.prep);
+
+        const prepText = Number.isFinite(prep) && prep >= 0
+          ? prep + " minutes preparation"
+          : "Preparation time not specified";
+
+        return `
+          <li>
+            <span class="dish-name">${quantity} × ${name}</span>
+            <span class="prep">${prepText}</span>
+          </li>
+        `;
+
+      }).join("");
+    }
+
+
+    /* =========================================
+       STEP 6: CREATE A KITCHEN TICKET
+    ========================================= */
+
+    function createTicketHTML(ticket, now) {
+
+      const status = ["pending", "cooking", "plated"].includes(ticket.status)
+        ? ticket.status
+        : "pending";
+
+      const arrival = getArrival(ticket);
+      const fireTime = getFireTime(ticket);
+      const timeToFire = fireTime - now;
+
+      const priority = ticket.arrived && status !== "plated";
+
+      let timerHTML = "";
+
+      if (status === "pending") {
+
+        if (priority) {
+
+          timerHTML = `
+            <div class="fire-alert">
+              GUEST ARRIVED - PRIORITY ORDER
+            </div>
+          `;
+
+        } else if (timeToFire <= 0) {
+
+          timerHTML = `
+            <div class="fire-alert">
+              TIME TO START PREPARATION
+            </div>
+          `;
+
+        } else {
+
+          timerHTML = `
+            <div class="countdown">
+              Start cooking in ${formatCountdown(timeToFire)}
+            </div>
+          `;
+        }
+
+      } else if (status === "cooking") {
+
+        timerHTML = `
+          <div class="countdown">
+            Cooking in progress · Guest arrival: ${formatTime(arrival)}
+          </div>
+        `;
+
+      } else {
+
+        timerHTML = `
+          <div class="countdown">
+            Order preparation completed.
+          </div>
+        `;
+      }
+
+      let buttonsHTML = "";
+
+      if (status === "pending") {
+
+        buttonsHTML += `
+          <button class="btn-cook" data-action="cook" data-id="${safe(ticket.id)}">
+            Start Cooking
+          </button>
+        `;
+
+        if (!ticket.arrived) {
+
+          buttonsHTML += `
+            <button class="btn-arrived" data-action="arrived" data-id="${safe(ticket.id)}">
+              Guest Arrived
+            </button>
+          `;
+
+        }
+
+      } else if (status === "cooking") {
+
+        buttonsHTML = `
+          <button class="btn-ready" data-action="ready" data-id="${safe(ticket.id)}">
+            Mark Ready
+          </button>
+        `;
+
+      } else {
+
+        buttonsHTML = `
+          <button class="btn-remove" data-action="remove" data-id="${safe(ticket.id)}">
+            Remove Ticket
+          </button>
+        `;
+      }
+
+      const notesHTML = ticket.notes
+        ? `<div class="notes"><strong>Special Instructions:</strong><br>${safe(ticket.notes)}</div>`
+        : "";
+
+      const bookingHTML = ticket.bookingId
+        ? `<div class="booking-id">Booking: ${safe(ticket.bookingId)}</div>`
+        : '<div class="booking-id">Demo order</div>';
+
+      return `
+        <article class="ticket ${status} ${priority ? "arrived-ticket" : ""}">
+
+          <div class="ticket-head">
+
+            <div>
+              <h2>Table ${safe(ticket.table ?? "N/A")}</h2>
+              ${bookingHTML}
+            </div>
+
+            <span class="badge ${status}">
+              ${status.charAt(0).toUpperCase() + status.slice(1)}
+            </span>
+
+          </div>
+
+          ${priority ? '<div class="priority-tag">★ PRIORITY - GUEST ARRIVED</div>' : ""}
+
+          <div class="guest">
+            ${safe(ticket.guest || "Guest")}
+          </div>
+
+          <div class="arrival">
+            Scheduled arrival: <strong>${formatTime(arrival)}</strong>
+          </div>
+
+          ${timerHTML}
+
+          <h3 class="items-heading">ORDER DETAILS</h3>
+
+          <ul class="items">
+            ${createItemsHTML(ticket.items)}
+          </ul>
+
+          ${notesHTML}
+
+          <div class="ticket-buttons">
+            ${buttonsHTML}
+          </div>
+
+        </article>
+      `;
+    }
+
+
+    /* =========================================
+       STEP 7: DISPLAY THE BOARD
+    ========================================= */
+
+    function showBoard() {
+
+      const board = document.getElementById("board");
+      const now = Date.now();
+
+      tickets.sort(sortTickets);
+
+      if (tickets.length === 0) {
+
+        board.innerHTML = `
+          <div class="empty-message">
+            <span>🍽️</span>
+            <h3>No Kitchen Orders Yet</h3>
+            <p>New customer pre-orders will appear here.</p>
+          </div>
+        `;
+
+        updateSummary();
+        return;
+      }
+
+      board.innerHTML = tickets.map(function(ticket) {
+        return createTicketHTML(ticket, now);
+      }).join("");
+
+      updateSummary();
+    }
+
+
+    /* =========================================
+       STEP 8: FIND TICKET
+    ========================================= */
+
+    function findTicket(id) {
+
+      return tickets.find(function(ticket) {
+        return String(ticket.id) === String(id);
+      });
+
+    }
+
+
+    /* =========================================
+       STEP 9: HANDLE TICKET BUTTONS
+    ========================================= */
+
+    document.getElementById("board").addEventListener("click", function(event) {
+
+      const button = event.target.closest("[data-action]");
+
+      if (!button) return;
+
+      const action = button.dataset.action;
+      const id = button.dataset.id;
+
+      const ticket = findTicket(id);
+
+      if (!ticket) return;
+
+      if (action === "cook") {
+
+        ticket.status = "cooking";
+
+      } else if (action === "ready") {
+
+        ticket.status = "plated";
+
+      } else if (action === "arrived") {
+
+        const confirmed = confirm("Mark this guest as arrived?");
+
+        if (!confirmed) return;
+
+        ticket.arrived = true;
+        ticket.arrivedAt = Date.now();
+
+      } else if (action === "remove") {
+
+        const confirmed = confirm("Remove this completed kitchen ticket?");
+
+        if (!confirmed) return;
+
+        tickets = tickets.filter(function(t) {
+          return String(t.id) !== String(id);
+        });
+
+      }
+
+      saveTickets();
+      showBoard();
+
+    });
+
+
+    /* =========================================
+       STEP 10: ADD DEMO ORDER
+    ========================================= */
+
+    document.getElementById("addDemoBtn").addEventListener("click", function() {
+
+      const now = Date.now();
+
+      const demoTicket = {
+        id: "DEMO-" + now,
+        bookingId: "DEMO-" + now,
+        table: 4,
+        guest: "Demo Guest",
+        arrival: now + 21 * MINUTE,
+        arrived: false,
+        status: "pending",
+        notes: "Demo order for presentation",
+        isDemo: true,
+        items: [
+          {
+            name: "Chicken Biryani",
+            qty: 1,
+            prep: 20
+          },
+          {
+            name: "Butter Naan",
+            qty: 2,
+            prep: 10
+          }
+        ]
+      };
+
+      tickets.push(demoTicket);
+
+      saveTickets();
+      showBoard();
+
+    });
+
+
+    /* =========================================
+       STEP 11: RESET DEMO ORDERS
+    ========================================= */
+
+    document.getElementById("resetBtn").addEventListener("click", function() {
+
+      const confirmed = confirm(
+        "Remove all demo orders? Actual customer orders will remain."
+      );
+
+      if (!confirmed) return;
+
+      tickets = tickets.filter(function(ticket) {
+        return ticket.isDemo !== true;
+      });
+
+      saveTickets();
+      showBoard();
+
+    });
+
+
+    /* =========================================
+       STEP 12: LIVE CLOCK
+    ========================================= */
+
+    function updateClock() {
+
+      document.getElementById("clock").textContent =
+        new Date().toLocaleTimeString();
+
+    }
+
+
+    /* =========================================
+       STEP 13: AUTOMATIC REFRESH
+    ========================================= */
+
+    function refreshKitchen() {
+
+      updateClock();
+      showBoard();
+
+    }
+
+    loadTickets();
+    refreshKitchen();
+
+    setInterval(refreshKitchen, 1000);
+
+
+    /* =========================================
+       STEP 14: LISTEN FOR OTHER PAGE UPDATES
+    ========================================= */
+
+    window.addEventListener("storage", function(event) {
+
+      if (event.key === STORAGE_KEY || event.key === null) {
+
+        loadTickets();
+        showBoard();
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>

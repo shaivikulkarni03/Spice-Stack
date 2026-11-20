@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - SpiceStack</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #2b1710, #6b3019);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .register-box {
+      background: #fffaf4;
+      width: 100%;
+      max-width: 430px;
+      padding: 32px;
+      border-radius: 14px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .register-box h1 {
+      color: #b94e19;
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 30px;
+    }
+
+    .register-box p {
+      text-align: center;
+      color: #777;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+      color: #39251d;
+      font-size: 14px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 17px;
+      border: 1px solid #d8c8bd;
+      border-radius: 7px;
+      font-size: 15px;
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #c45b24;
+      box-shadow: 0 0 4px rgba(196, 91, 36, 0.3);
+    }
+
+    .terms {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: normal;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .terms input {
+      width: auto;
+      margin: 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      background: #c45b24;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #963e16;
+    }
+
+    .message {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .links {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .links a {
+      color: #b94e19;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    .back-home {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: #8b4526;
+      text-decoration: none;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="register-box">
+
+    <h1>SpiceStack</h1>
+    <p>Create your account</p>
+
+    <form id="registerForm">
+
+      <label for="fullname">Full Name</label>
+      <input
+        type="text"
+        id="fullname"
+        name="fullname"
+        placeholder="Enter your full name"
+        required
+      >
+
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="you@example.com"
+        required
+      >
+
+      <label for="phone">Mobile Number</label>
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        placeholder="10-digit mobile number"
+        pattern="[0-9]{10}"
+        maxlength="10"
+        required
+      >
+
+      <label for="role">I am a</label>
+      <select id="role" name="role" required>
+        <option value="diner">Diner</option>
+        <option value="hostess">Hostess</option>
+        <option value="kitchen">Kitchen Staff</option>
+        <option value="manager">Manager</option>
+      </select>
+
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="At least 6 characters"
+        minlength="6"
+        required
+      >
+
+      <label for="confirm">Confirm Password</label>
+      <input
+        type="password"
+        id="confirm"
+        name="confirm"
+        placeholder="Enter password again"
+        minlength="6"
+        required
+      >
+
+      <label class="terms">
+        <input type="checkbox" id="terms" required>
+        I agree to the terms of use
+      </label>
+
+      <button type="submit">Create Account</button>
+
+      <div class="message" id="message"></div>
+
+    </form>
+
+    <div class="links">
+      Already registered? <a href="register.html">Return to Register</a>
+    </div>
+
+    <a href="index.html" class="back-home">← Back to Home</a>
+
+  </div>
+
+  <script>
+    const registerForm = document.getElementById("registerForm");
+    const message = document.getElementById("message");
+
+    registerForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const fullname = document.getElementById("fullname").value.trim();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const phone = document.getElementById("phone").value.trim();
+      const role = document.getElementById("role").value;
+      const password = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm").value;
+
+      if (password !== confirm) {
+        message.style.color = "red";
+        message.textContent = "Passwords do not match!";
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("spiceStackUsers")) || [];
+
+      const existingUser = users.find(user => user.email === email);
+
+      if (existingUser) {
+        message.style.color = "red";
+        message.textContent = "This email is already registered!";
+        return;
+      }
+
+      const newUser = {
+        fullname: fullname,
+        email: email,
+        phone: phone,
+        role: role
+      };
+
+      users.push(newUser);
+
+      localStorage.setItem("spiceStackUsers", JSON.stringify(users));
+
+      message.style.color = "green";
+      message.textContent = "Registration successful!";
+
+      registerForm.reset();
+
+    });
+  </script>
+
+</body>
+</html>

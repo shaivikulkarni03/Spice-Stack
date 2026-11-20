@@ -1,0 +1,1207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Reservations - SpiceStack</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff4e6;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    /* NAVIGATION */
+    .navbar {
+      background: #d35400;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* HEADING */
+    .page-title {
+      text-align: center;
+      padding: 35px 20px 15px;
+    }
+
+    .page-title h1 {
+      color: #d35400;
+      font-size: 30px;
+    }
+
+    .page-title p {
+      color: #666;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    /* SEARCH */
+    .lookup {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .lookup input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    .lookup input:focus {
+      outline: none;
+      border-color: #d35400;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #d35400;
+      color: white;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background: #b34700;
+    }
+
+    .btn-gray {
+      background: #777;
+    }
+
+    .btn-gray:hover {
+      background: #555;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 35px 10px;
+    }
+
+    .empty a {
+      color: #d35400;
+    }
+
+    /* BOOKING PASS */
+    .pass {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+      margin-bottom: 25px;
+      overflow: hidden;
+    }
+
+    .pass-top {
+      background: #d35400;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pass-top h2 {
+      font-size: 21px;
+    }
+
+    .pass-body {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .pass-info {
+      flex: 1;
+      min-width: 230px;
+    }
+
+    .pass-qr {
+      text-align: center;
+      min-width: 140px;
+    }
+
+    .qr-box {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #777;
+      overflow: hidden;
+    }
+
+    .qr-box img {
+      max-width: 120px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 7px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    .row span:last-child {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .pass h3 {
+      color: #d35400;
+      margin: 15px 0 7px;
+      font-size: 16px;
+    }
+
+    .items-list {
+      list-style: none;
+      font-size: 14px;
+    }
+
+    .items-list li {
+      padding: 3px 0;
+    }
+
+    .note {
+      background: #fff4e6;
+      border-left: 4px solid #d35400;
+      padding: 9px 12px;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .muted {
+      color: #777;
+      font-size: 13px;
+    }
+
+    /* STATUS BADGES */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 12px;
+      color: #000;
+    }
+
+    .badge-pending {
+      background: #f1c40f;
+    }
+
+    .badge-cooking {
+      background: #2ecc71;
+    }
+
+    .badge-plated {
+      background: #3498db;
+      color: white;
+    }
+
+    .badge-cancelled {
+      background: #ccc;
+    }
+
+    /* ORDER TRACKER */
+    .tracker {
+      border-top: 1px solid #eee;
+      padding: 18px 20px;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      list-style: none;
+      margin: 15px 0;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      padding-top: 30px;
+      position: relative;
+    }
+
+    .step::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      margin-left: -10px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ddd;
+    }
+
+    .step.done {
+      color: #333;
+      font-weight: bold;
+    }
+
+    .step.done::before {
+      background: #f1c40f;
+    }
+
+    .step.done.s-cooking::before {
+      background: #2ecc71;
+    }
+
+    .step.done.s-plated::before {
+      background: #3498db;
+    }
+
+    .tracker-message {
+      text-align: center;
+      font-weight: bold;
+      color: #d35400;
+      min-height: 22px;
+      font-size: 14px;
+    }
+
+    .pass-actions {
+      padding: 0 20px 18px;
+    }
+
+    footer {
+      background: #2b1b14;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    @media(max-width: 600px) {
+      .navbar {
+        justify-content: center;
+      }
+
+      .nav-links {
+        justify-content: center;
+      }
+
+      .lookup {
+        flex-direction: column;
+      }
+
+      .pass-body {
+        padding: 15px;
+      }
+
+      .step {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar">
+
+    <a href="index.html" class="logo">SpiceStack</a>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="reserve.html">Reserve</a></li>
+      <li><a href="my-reservations.html">My Reservations</a></li>
+      <li><a href="hostess.html">Hostess</a></li>
+      <li><a href="kitchen.html">Kitchen</a></li>
+      <li><a href="analytics.html">Analytics</a></li>
+    </ul>
+
+  </nav>
+
+
+  <!-- PAGE HEADING -->
+  <div class="page-title">
+
+    <h1>My Reservations</h1>
+
+    <p>
+      View your booking details and follow your pre-order status.
+    </p>
+
+  </div>
+
+
+  <div class="container">
+
+    <!-- SEARCH -->
+    <div class="lookup">
+
+      <input
+        type="text"
+        id="lookupInput"
+        placeholder="Enter mobile number or booking ID"
+      >
+
+      <button class="btn" id="lookupBtn">
+        Find
+      </button>
+
+      <button class="btn btn-gray" id="allBtn">
+        Show All
+      </button>
+
+    </div>
+
+
+    <!-- BOOKING PASSES -->
+    <div id="passList"></div>
+
+    <p class="empty" id="emptyText" style="display:none;"></p>
+
+  </div>
+
+
+  <!-- QR CODE LIBRARY -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+  <script>
+
+    /* =====================================
+       1. LOAD DATA
+    ===================================== */
+
+    function readStorage(key, fallback) {
+
+      try {
+
+        var data = localStorage.getItem(key);
+
+        if (!data) {
+          return fallback;
+        }
+
+        return JSON.parse(data);
+
+      } catch (error) {
+
+        console.error("Storage error:", error);
+
+        return fallback;
+
+      }
+
+    }
+
+
+    function loadReservations() {
+
+      var data = readStorage("reservations", []);
+
+      return Array.isArray(data) ? data : [];
+
+    }
+
+
+    function loadTickets() {
+
+      var data = readStorage("kitchenTickets", []);
+
+      return Array.isArray(data) ? data : [];
+
+    }
+
+
+    function saveReservations(data) {
+
+      localStorage.setItem(
+        "reservations",
+        JSON.stringify(data)
+      );
+
+    }
+
+
+    function saveTickets(data) {
+
+      localStorage.setItem(
+        "kitchenTickets",
+        JSON.stringify(data)
+      );
+
+    }
+
+
+    function findTicket(bookingId) {
+
+      var tickets = loadTickets();
+
+      for (var i = 0; i < tickets.length; i++) {
+
+        if (tickets[i].bookingId === bookingId) {
+          return tickets[i];
+        }
+
+      }
+
+      return null;
+
+    }
+
+
+    /* =====================================
+       2. HELPER FUNCTIONS
+    ===================================== */
+
+    function safe(value) {
+
+      return String(value == null ? "" : value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+    }
+
+
+    function slotLabel(minutes) {
+
+      var h = Math.floor(minutes / 60);
+      var m = minutes % 60;
+
+      var ampm = h >= 12 ? "PM" : "AM";
+
+      var h12 = h % 12 === 0 ? 12 : h % 12;
+
+      return h12 + ":" +
+        (m < 10 ? "0" : "") + m + " " + ampm;
+
+    }
+
+
+    function dateLabel(dateText) {
+
+      var p = dateText.split("-");
+
+      var d = new Date(
+        Number(p[0]),
+        Number(p[1]) - 1,
+        Number(p[2])
+      );
+
+      return d.toLocaleDateString([], {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
+
+    }
+
+
+    /* =====================================
+       3. CREATE BOOKING PASS
+    ===================================== */
+
+    function buildPass(r) {
+
+      var itemsHtml = "";
+
+      if (Array.isArray(r.items) && r.items.length > 0) {
+
+        for (var i = 0; i < r.items.length; i++) {
+
+          var item = r.items[i];
+
+          // New reservation format uses quantity.
+          // Older data may use qty.
+
+          var quantity = Number(
+            item.quantity != null ? item.quantity : item.qty
+          ) || 0;
+
+          itemsHtml +=
+            "<li>" +
+            quantity + " x " +
+            safe(item.name) +
+            "</li>";
+
+        }
+
+        itemsHtml =
+          '<ul class="items-list">' +
+          itemsHtml +
+          "</ul>";
+
+      } else {
+
+        itemsHtml =
+          '<p class="muted">No dishes pre-ordered.</p>';
+
+      }
+
+
+      var notesHtml = r.notes
+        ? '<div class="note">Kitchen note: ' +
+          safe(r.notes) +
+          '</div>'
+        : "";
+
+
+      var total = Number(r.total) || 0;
+
+      var totalHtml = total > 0
+        ? "₹" + total.toFixed(2)
+        : "No pre-order";
+
+
+      var trackerHtml = "";
+
+      if (Array.isArray(r.items) && r.items.length > 0) {
+
+        trackerHtml =
+
+          '<div class="tracker">' +
+
+            "<h3>Order Tracker</h3>" +
+
+            '<ol class="steps">' +
+
+              '<li class="step s-pending">Order received</li>' +
+
+              '<li class="step s-cooking">Being prepared</li>' +
+
+              '<li class="step s-plated">Ready</li>' +
+
+            "</ol>" +
+
+            '<p class="tracker-message"></p>' +
+
+          "</div>";
+
+      }
+
+
+      var cancelled =
+        r.status === "cancelled";
+
+
+      return (
+
+        '<div class="pass" data-id="' + safe(r.id) + '">' +
+
+          '<div class="pass-top">' +
+
+            "<h2>" + safe(r.id) + "</h2>" +
+
+            '<span class="badge pass-badge badge-pending">' +
+            "Pending" +
+            "</span>" +
+
+          "</div>" +
+
+
+          '<div class="pass-body">' +
+
+            '<div class="pass-info">' +
+
+              '<div class="row">' +
+                "<span>Guest</span>" +
+                "<span>" + safe(r.name) + "</span>" +
+              "</div>" +
+
+              '<div class="row">' +
+                "<span>Table</span>" +
+                "<span>Table " + safe(r.table) + "</span>" +
+              "</div>" +
+
+              '<div class="row">' +
+                "<span>Date</span>" +
+                "<span>" + dateLabel(r.date) + "</span>" +
+              "</div>" +
+
+              '<div class="row">' +
+                "<span>Time</span>" +
+                "<span>" +
+                  slotLabel(r.start) +
+                  " - " +
+                  slotLabel(Number(r.start) + 90) +
+                "</span>" +
+              "</div>" +
+
+              '<div class="row">' +
+                "<span>Guests</span>" +
+                "<span>" + safe(r.party) + "</span>" +
+              "</div>" +
+
+              '<div class="row">' +
+                "<span>Order total</span>" +
+                "<span>" + totalHtml + "</span>" +
+              "</div>" +
+
+              "<h3>Pre-ordered Items</h3>" +
+
+              itemsHtml +
+
+              notesHtml +
+
+            "</div>" +
+
+
+            '<div class="pass-qr">' +
+
+              '<div class="qr-box" data-qr="' +
+                safe(r.id) +
+              '"></div>' +
+
+              '<p class="muted">Booking ID QR Code</p>' +
+
+            "</div>" +
+
+          "</div>" +
+
+
+          trackerHtml +
+
+
+          '<div class="pass-actions">' +
+
+            (
+              cancelled
+                ? '<p class="muted">This reservation has been cancelled.</p>'
+                : '<button class="btn btn-gray cancel-btn" data-cancel="' +
+                    safe(r.id) +
+                    '">Cancel Booking</button>'
+            ) +
+
+          "</div>" +
+
+        "</div>"
+
+      );
+
+    }
+
+
+    /* =====================================
+       4. SHOW BOOKING PASSES
+    ===================================== */
+
+    function showPasses(list) {
+
+      var html = "";
+
+      for (var i = 0; i < list.length; i++) {
+
+        html += buildPass(list[i]);
+
+      }
+
+      document.getElementById("passList").innerHTML = html;
+
+
+      // Draw QR codes
+
+      var boxes = document.querySelectorAll(".qr-box");
+
+      for (var j = 0; j < boxes.length; j++) {
+
+        var id = boxes[j].getAttribute("data-qr");
+
+        if (typeof QRCode !== "undefined") {
+
+          new QRCode(boxes[j], {
+            text: id,
+            width: 120,
+            height: 120
+          });
+
+        } else {
+
+          boxes[j].innerText = id;
+
+        }
+
+      }
+
+
+      document.getElementById("emptyText").style.display = "none";
+
+      updateTrackers();
+
+    }
+
+
+    /* =====================================
+       5. UPDATE ORDER TRACKER
+    ===================================== */
+
+    function updateTrackers() {
+
+      var reservations = loadReservations();
+
+      var passes = document.querySelectorAll(".pass");
+
+
+      for (var i = 0; i < passes.length; i++) {
+
+        var pass = passes[i];
+
+        var id = pass.getAttribute("data-id");
+
+        var r = reservations.find(function(item) {
+          return item.id === id;
+        });
+
+        if (!r) {
+          continue;
+        }
+
+
+        var ticket = findTicket(id);
+
+        var status = r.status === "cancelled"
+          ? "cancelled"
+          : (ticket ? ticket.status : "pending");
+
+
+        if (
+          status !== "pending" &&
+          status !== "cooking" &&
+          status !== "plated" &&
+          status !== "cancelled"
+        ) {
+          status = "pending";
+        }
+
+
+        var message = "";
+
+
+        if (status === "cancelled") {
+
+          message = "This reservation has been cancelled.";
+
+        } else if (!ticket && r.items && r.items.length > 0) {
+
+          message = "Your order is waiting for the kitchen.";
+
+        } else if (status === "pending") {
+
+          message = ticket && ticket.arrived
+            ? "You are checked in. Your order is waiting to be prepared."
+            : "Order received. Waiting for preparation.";
+
+        } else if (status === "cooking") {
+
+          message = "Your food is being prepared!";
+
+        } else if (status === "plated") {
+
+          message = "Your food is ready. Enjoy your meal!";
+
+        }
+
+
+        // UPDATE STATUS BADGE
+
+        var badge = pass.querySelector(".pass-badge");
+
+        if (badge) {
+
+          var labels = {
+            pending: "Pending",
+            cooking: "Cooking",
+            plated: "Ready",
+            cancelled: "Cancelled"
+          };
+
+          badge.className =
+            "badge pass-badge badge-" + status;
+
+          badge.innerText = labels[status];
+
+        }
+
+
+        // UPDATE TRACKER
+
+        var steps = pass.querySelectorAll(".step");
+
+        if (steps.length > 0) {
+
+          var level = {
+            pending: 1,
+            cooking: 2,
+            plated: 3,
+            cancelled: 0
+          }[status];
+
+
+          for (var s = 0; s < steps.length; s++) {
+
+            if (s < level) {
+              steps[s].classList.add("done");
+            } else {
+              steps[s].classList.remove("done");
+            }
+
+          }
+
+
+          if (status === "cooking") {
+            steps[1].classList.add("done");
+          }
+
+          if (status === "plated") {
+            steps[1].classList.add("done");
+            steps[2].classList.add("done");
+          }
+
+
+          var messageBox =
+            pass.querySelector(".tracker-message");
+
+          if (messageBox) {
+            messageBox.innerText = message;
+          }
+
+        }
+
+
+        // HIDE CANCEL BUTTON WHEN NOT ALLOWED
+
+        var actions = pass.querySelector(".pass-actions");
+
+        if (actions) {
+
+          var cancelButton = actions.querySelector(".cancel-btn");
+
+          if (cancelButton) {
+
+            cancelButton.style.display =
+              (status === "cancelled" || status === "plated")
+                ? "none"
+                : "inline-block";
+
+          }
+
+        }
+
+      }
+
+    }
+
+
+    /* =====================================
+       6. SEARCH BOOKINGS
+    ===================================== */
+
+    function findBookings(text) {
+
+      var all = loadReservations();
+
+      var found = [];
+
+      text = text.trim().toLowerCase();
+
+
+      for (var i = 0; i < all.length; i++) {
+
+        var r = all[i];
+
+        var bookingId = String(r.id || "").toLowerCase();
+
+        var phone = String(r.phone || "");
+
+
+        if (
+          bookingId === text ||
+          phone === text
+        ) {
+
+          found.push(r);
+
+        }
+
+      }
+
+      return found;
+
+    }
+
+
+    function showResult(list, message) {
+
+      var empty = document.getElementById("emptyText");
+
+      if (list.length === 0) {
+
+        document.getElementById("passList").innerHTML = "";
+
+        empty.innerHTML = message;
+
+        empty.style.display = "block";
+
+      } else {
+
+        showPasses(list);
+
+      }
+
+    }
+
+
+    document.getElementById("lookupBtn").addEventListener("click", function() {
+
+      var text =
+        document.getElementById("lookupInput").value.trim();
+
+      if (text === "") {
+
+        showResult(
+          [],
+          "Please enter a mobile number or booking ID."
+        );
+
+        return;
+
+      }
+
+      showResult(
+        findBookings(text),
+        "No reservation found. Please check your booking ID or mobile number."
+      );
+
+    });
+
+
+    // Search when Enter is pressed
+
+    document.getElementById("lookupInput").addEventListener("keydown", function(event) {
+
+      if (event.key === "Enter") {
+
+        document.getElementById("lookupBtn").click();
+
+      }
+
+    });
+
+
+    /* =====================================
+       7. SHOW ALL BOOKINGS
+    ===================================== */
+
+    document.getElementById("allBtn").addEventListener("click", function() {
+
+      var all = loadReservations();
+
+      all.sort(function(a, b) {
+        return Number(b.createdAt || 0) -
+               Number(a.createdAt || 0);
+      });
+
+      showResult(
+        all,
+        'No reservations yet. <a href="reserve.html">Reserve a table</a>.'
+      );
+
+    });
+
+
+    /* =====================================
+       8. CANCEL RESERVATION
+    ===================================== */
+
+    document.getElementById("passList").addEventListener("click", function(event) {
+
+      var id = event.target.getAttribute("data-cancel");
+
+      if (!id) {
+        return;
+      }
+
+      if (!confirm("Are you sure you want to cancel booking " + id + "?")) {
+        return;
+      }
+
+
+      var reservations = loadReservations();
+
+      var reservation = reservations.find(function(r) {
+        return r.id === id;
+      });
+
+
+      if (!reservation || reservation.status === "cancelled") {
+        return;
+      }
+
+
+      reservation.status = "cancelled";
+
+      reservation.cancelledAt = Date.now();
+
+      saveReservations(reservations);
+
+
+      /*
+        Keep the kitchen ticket for history.
+        Mark it cancelled instead of deleting it.
+      */
+
+      var tickets = loadTickets();
+
+      for (var i = 0; i < tickets.length; i++) {
+
+        if (tickets[i].bookingId === id) {
+
+          tickets[i].status = "cancelled";
+
+          tickets[i].cancelledAt = Date.now();
+
+        }
+
+      }
+
+      saveTickets(tickets);
+
+
+      showResult(
+        reservations.filter(function(r) {
+          return r.id === id;
+        }),
+        "Reservation not found."
+      );
+
+    });
+
+
+    /* =====================================
+       9. INITIAL PAGE LOAD
+    ===================================== */
+
+    var lastId = localStorage.getItem("lastBookingId");
+
+
+    if (lastId) {
+
+      showResult(
+        findBookings(lastId),
+        'Booking not found. <a href="reserve.html">Make a new reservation</a>.'
+      );
+
+    } else {
+
+      showResult(
+        [],
+        'No bookings yet. <a href="reserve.html">Reserve a table</a> to get started.'
+      );
+
+    }
+
+
+    /* =====================================
+       10. LIVE UPDATES
+    ===================================== */
+
+    setInterval(function() {
+
+      updateTrackers();
+
+    }, 2000);
+
+
+    window.addEventListener("storage", function(event) {
+
+      if (
+        event.key === "reservations" ||
+        event.key === "kitchenTickets" ||
+        event.key === null
+      ) {
+
+        var currentId =
+          document.getElementById("lookupInput").value.trim();
+
+        if (currentId !== "") {
+
+          showResult(
+            findBookings(currentId),
+            "No reservation found."
+          );
+
+        } else {
+
+          updateTrackers();
+
+        }
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>

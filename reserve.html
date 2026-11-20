@@ -1,0 +1,1628 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserve a Table - SpiceStack</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff4e6;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    /* NAVIGATION */
+    .navbar {
+      background-color: #d35400;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* PAGE HEADING */
+    .page-title {
+      text-align: center;
+      padding: 35px 20px 15px;
+    }
+
+    .page-title h1 {
+      color: #d35400;
+      font-size: 32px;
+    }
+
+    .page-title p {
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* MAIN LAYOUT */
+    .layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      max-width: 1150px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .left {
+      flex: 3;
+      min-width: 300px;
+    }
+
+    .right {
+      flex: 2;
+      min-width: 280px;
+    }
+
+    .box {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+      margin-bottom: 20px;
+    }
+
+    .box h2 {
+      color: #d35400;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    /* FORM */
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 11px;
+      margin-bottom: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #d35400;
+    }
+
+    .error {
+      color: #c0392b;
+      font-size: 14px;
+      min-height: 20px;
+      margin-bottom: 10px;
+    }
+
+    /* TIME SLOTS */
+    .slot-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .slot {
+      background: white;
+      color: #d35400;
+      border: 1px solid #d35400;
+      padding: 9px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .slot:hover:not(:disabled) {
+      background: #ffe9d6;
+    }
+
+    .slot.selected {
+      background: #d35400;
+      color: white;
+    }
+
+    .slot.full,
+    .slot:disabled {
+      background: #eee;
+      color: #999;
+      border-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .slot small {
+      display: block;
+      font-size: 11px;
+    }
+
+    .allocation {
+      background: #fff4e6;
+      border-left: 4px solid #d35400;
+      padding: 12px;
+      border-radius: 5px;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-block;
+      background: #d35400;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background: #b34700;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn-gray {
+      background: #777;
+    }
+
+    .btn-gray:hover {
+      background: #555;
+    }
+
+    /* ORDER SUMMARY */
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 5px 0;
+      font-size: 14px;
+    }
+
+    .summary-total {
+      font-weight: bold;
+      border-top: 2px solid #d35400;
+      margin-top: 7px;
+      padding-top: 9px;
+    }
+
+    .muted {
+      color: #777;
+      font-size: 14px;
+    }
+
+    .muted a {
+      color: #d35400;
+    }
+
+    /* TABLE MAP */
+    .table-map {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .table-card {
+      width: 90px;
+      padding: 12px 6px;
+      border-radius: 9px;
+      text-align: center;
+      font-size: 13px;
+      border: 2px solid #27ae60;
+      background: #eafaf1;
+    }
+
+    .table-card strong {
+      display: block;
+      font-size: 18px;
+    }
+
+    .table-card.booked {
+      border-color: #c0392b;
+      background: #fdecea;
+      color: #c0392b;
+    }
+
+    .table-card.yours {
+      border-color: #d35400;
+      background: #d35400;
+      color: white;
+    }
+
+    .legend {
+      margin-top: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 13px;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    /* CONFIRMATION */
+    .confirm-box {
+      max-width: 600px;
+      margin: 25px auto 45px;
+      padding: 0 20px;
+    }
+
+    .confirm-box h2 {
+      text-align: center;
+      font-size: 25px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 9px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .detail-row span:last-child {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .sms {
+      background: #e8f5e9;
+      border-radius: 10px;
+      padding: 13px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #f1c40f;
+      color: black;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .button-row .btn {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    footer {
+      background: #2b1b14;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 25px;
+    }
+
+    @media (max-width: 650px) {
+      .navbar {
+        justify-content: center;
+      }
+
+      .nav-links {
+        justify-content: center;
+      }
+
+      .page-title h1 {
+        font-size: 26px;
+      }
+
+      .layout {
+        padding: 12px;
+      }
+
+      .box {
+        padding: 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar">
+    <a href="index.html" class="logo">SpiceStack</a>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="reserve.html">Reserve</a></li>
+      <li><a href="my-reservations.html">My Reservations</a></li>
+      <li><a href="hostess.html">Hostess</a></li>
+      <li><a href="kitchen.html">Kitchen</a></li>
+      <li><a href="analytics.html">Analytics</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- BOOKING PAGE -->
+  <div id="bookingPage">
+
+    <div class="page-title">
+      <h1>Reserve a Table</h1>
+      <p>Choose your date and time. Each reservation holds a table for 90 minutes.</p>
+    </div>
+
+    <div class="layout">
+
+      <!-- BOOKING FORM -->
+      <div class="left">
+
+        <form class="box" id="bookingForm" novalidate>
+
+          <h2>Your Details</h2>
+
+          <label for="guestName">Name</label>
+          <input
+            type="text"
+            id="guestName"
+            placeholder="Enter your name"
+            required
+          >
+
+          <label for="guestPhone">Mobile Number</label>
+          <input
+            type="tel"
+            id="guestPhone"
+            placeholder="10-digit mobile number"
+            maxlength="10"
+            inputmode="numeric"
+            required
+          >
+
+          <label for="partySize">Party Size</label>
+          <select id="partySize">
+            <option value="1">1 guest</option>
+            <option value="2" selected>2 guests</option>
+            <option value="3">3 guests</option>
+            <option value="4">4 guests</option>
+            <option value="5">5 guests</option>
+            <option value="6">6 guests</option>
+          </select>
+
+          <label for="diningDate">Date</label>
+          <input type="date" id="diningDate" required>
+
+          <label>Time Slot (90 minutes)</label>
+          <div class="slot-grid" id="slotGrid"></div>
+
+          <div class="allocation" id="allocation">
+            Choose a time slot to see your table.
+          </div>
+
+          <p class="error" id="errorText"></p>
+
+          <button type="submit" class="btn btn-full">
+            Confirm Reservation
+          </button>
+
+        </form>
+
+
+        <!-- PRE-ORDER SUMMARY -->
+        <div class="box">
+          <h2>Your Pre-Order</h2>
+          <div id="orderSummary"></div>
+        </div>
+
+      </div>
+
+
+      <!-- TABLE MAP -->
+      <div class="right">
+
+        <div class="box">
+          <h2>Floor Availability</h2>
+
+          <p class="muted" style="margin-bottom: 12px;">
+            Tables for your selected date and time.
+          </p>
+
+          <div class="table-map" id="tableMap"></div>
+
+          <div class="legend">
+            <span>
+              <span class="dot" style="background:#27ae60;"></span>
+              Free
+            </span>
+
+            <span>
+              <span class="dot" style="background:#c0392b;"></span>
+              Booked
+            </span>
+
+            <span>
+              <span class="dot" style="background:#d35400;"></span>
+              Yours
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- CONFIRMATION PAGE -->
+  <div class="confirm-box" id="confirmPage" style="display:none;">
+
+    <div class="box">
+
+      <h2>You're Booked!</h2>
+
+      <p style="text-align:center; margin:12px 0;">
+        Booking ID:
+        <strong id="cId"></strong>
+      </p>
+
+      <div class="detail-row">
+        <span>Name</span>
+        <span id="cName"></span>
+      </div>
+
+      <div class="detail-row">
+        <span>Table</span>
+        <span id="cTable"></span>
+      </div>
+
+      <div class="detail-row">
+        <span>Date</span>
+        <span id="cDate"></span>
+      </div>
+
+      <div class="detail-row">
+        <span>Time</span>
+        <span id="cTime"></span>
+      </div>
+
+      <div class="detail-row">
+        <span>Guests</span>
+        <span id="cGuests"></span>
+      </div>
+
+      <div class="detail-row">
+        <span>Order Total</span>
+        <span id="cTotal"></span>
+      </div>
+
+      <div class="detail-row">
+        <span>Reservation Status</span>
+        <span class="badge">Pending</span>
+      </div>
+
+      <h2 style="margin-top:20px;">SMS Confirmation (Simulated)</h2>
+
+      <div class="sms" id="smsText"></div>
+
+      <div class="button-row">
+
+        <a
+          class="btn"
+          id="calendarLink"
+          href="#"
+          target="_blank"
+          rel="noopener"
+        >
+          Add to Google Calendar
+        </a>
+
+        <a class="btn btn-gray" href="my-reservations.html">
+          My Reservations
+        </a>
+
+        <a class="btn btn-gray" href="kitchen.html">
+          Kitchen Screen
+        </a>
+
+        <a class="btn btn-gray" href="reserve.html">
+          Book Another
+        </a>
+
+      </div>
+
+      <p class="muted" style="margin-top:15px;">
+        This is a front-end project demonstration. No real SMS is sent.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <footer>
+    <p>© 2026 SpiceStack. All Rights Reserved.</p>
+    <p>Good Food. Great Moments.</p>
+  </footer>
+
+
+  <script>
+
+    /* =========================================
+       1. TABLES AND RESTAURANT SETTINGS
+    ========================================= */
+
+    var tables = [
+      { id: 1, seats: 2 },
+      { id: 2, seats: 2 },
+      { id: 3, seats: 2 },
+      { id: 4, seats: 4 },
+      { id: 5, seats: 4 },
+      { id: 6, seats: 4 },
+      { id: 7, seats: 6 },
+      { id: 8, seats: 6 }
+    ];
+
+    var DINING_MINUTES = 90;
+
+    var slotStarts = [
+      1080, 1110, 1140, 1170,
+      1200, 1230, 1260, 1290
+    ];
+
+    var selectedSlot = null;
+    var allocatedTable = null;
+    var reservations = [];
+
+    /*
+      Preparation times are estimates for the kitchen
+      demonstration. They are matched using dish names.
+    */
+
+    var dishPrepTimes = {
+      "Paneer Tikka": 15,
+      "Chicken 65": 15,
+      "Veg Spring Rolls": 10,
+      "Fish Fingers": 12,
+      "Hara Bhara Kebab": 12,
+      "Tandoori Chicken": 20,
+      "Butter Chicken": 20,
+      "Dal Makhani": 20,
+      "Palak Paneer": 18,
+      "Mutton Rogan Josh": 25,
+      "Chicken Tikka Masala": 20,
+      "Chole Masala": 15,
+      "Grilled Chicken Steak": 25,
+      "Pasta Alfredo": 15,
+      "Chicken Biryani": 20,
+      "Veg Biryani": 20,
+      "Butter Naan": 10,
+      "Garlic Naan": 10,
+      "Jeera Rice": 10,
+      "Gulab Jamun": 10,
+      "Brownie with Ice Cream": 10,
+      "Rasmalai": 10,
+      "Masala Chai": 10,
+      "Sweet Lassi": 10,
+      "Fresh Lime Soda": 10
+    };
+
+
+    /* =========================================
+       2. HELPER FUNCTIONS
+    ========================================= */
+
+    function escapeHTML(value) {
+      return String(value == null ? "" : value).replace(/[&<>"']/g, function(char) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[char];
+      });
+    }
+
+
+    function slotLabel(minutes) {
+      var h = Math.floor(minutes / 60);
+      var m = minutes % 60;
+
+      var ampm = h >= 12 ? "PM" : "AM";
+      var h12 = h % 12 === 0 ? 12 : h % 12;
+
+      return h12 + ":" +
+        (m < 10 ? "0" : "") + m + " " + ampm;
+    }
+
+
+    function todayString() {
+      var d = new Date();
+
+      var month = d.getMonth() + 1;
+      var day = d.getDate();
+
+      return d.getFullYear() + "-" +
+        (month < 10 ? "0" : "") + month + "-" +
+        (day < 10 ? "0" : "") + day;
+    }
+
+
+    /*
+      Creates a local Date object.
+      This avoids UTC date conversion problems.
+    */
+
+    function makeDate(dateText, minutes) {
+      var parts = dateText.split("-");
+
+      var hours = Math.floor(minutes / 60);
+      var mins = minutes % 60;
+
+      return new Date(
+        Number(parts[0]),
+        Number(parts[1]) - 1,
+        Number(parts[2]),
+        hours,
+        mins
+      );
+    }
+
+
+    function formatDate(dateText) {
+      var parts = dateText.split("-");
+
+      var date = new Date(
+        Number(parts[0]),
+        Number(parts[1]) - 1,
+        Number(parts[2])
+      );
+
+      return date.toLocaleDateString([], {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
+    }
+
+
+    /* =========================================
+       3. LOCAL STORAGE
+    ========================================= */
+
+    function readStorage(key, fallback) {
+      try {
+        var saved = localStorage.getItem(key);
+
+        if (!saved) {
+          return fallback;
+        }
+
+        var parsed = JSON.parse(saved);
+
+        return parsed;
+      } catch (error) {
+        console.error("Storage error:", key, error);
+        return fallback;
+      }
+    }
+
+
+    function loadReservations() {
+      var saved = readStorage("reservations", []);
+
+      reservations = Array.isArray(saved) ? saved : [];
+    }
+
+
+    function saveReservations() {
+      localStorage.setItem(
+        "reservations",
+        JSON.stringify(reservations)
+      );
+    }
+
+
+    /* =========================================
+       4. TABLE AVAILABILITY
+    ========================================= */
+
+    function windowsOverlap(startA, startB) {
+      return (
+        startA < startB + DINING_MINUTES &&
+        startB < startA + DINING_MINUTES
+      );
+    }
+
+
+    function isTableBooked(tableId, dateText, start) {
+
+      for (var i = 0; i < reservations.length; i++) {
+
+        var r = reservations[i];
+
+        if (r.status === "cancelled") {
+          continue;
+        }
+
+        if (
+          Number(r.table) === Number(tableId) &&
+          r.date === dateText &&
+          windowsOverlap(Number(r.start), start)
+        ) {
+          return true;
+        }
+
+      }
+
+      return false;
+    }
+
+
+    function findTable(dateText, start, partySize) {
+
+      var best = null;
+
+      for (var i = 0; i < tables.length; i++) {
+
+        var table = tables[i];
+
+        if (table.seats < partySize) {
+          continue;
+        }
+
+        if (isTableBooked(table.id, dateText, start)) {
+          continue;
+        }
+
+        if (best === null || table.seats < best.seats) {
+          best = table;
+        }
+
+      }
+
+      return best ? best.id : null;
+    }
+
+
+    function seatsOf(tableId) {
+
+      for (var i = 0; i < tables.length; i++) {
+
+        if (tables[i].id === Number(tableId)) {
+          return tables[i].seats;
+        }
+
+      }
+
+      return 0;
+    }
+
+
+    function isPastSlot(dateText, start) {
+
+      var slotDate = makeDate(dateText, start);
+
+      return slotDate.getTime() <= Date.now();
+    }
+
+
+    /* =========================================
+       5. DISPLAY TIME SLOTS
+    ========================================= */
+
+    function showSlots() {
+
+      var dateText = document.getElementById("diningDate").value;
+      var party = Number(document.getElementById("partySize").value);
+
+      var html = "";
+
+      for (var i = 0; i < slotStarts.length; i++) {
+
+        var start = slotStarts[i];
+
+        var past = isPastSlot(dateText, start);
+
+        var free = findTable(dateText, start, party) !== null;
+
+        var disabled = past || !free;
+
+        var classes = "slot";
+
+        if (!free || past) {
+          classes += " full";
+        }
+
+        if (start === selectedSlot) {
+          classes += " selected";
+        }
+
+        var label = past ? "Passed" : (free ? "Available" : "Full");
+
+        html +=
+          '<button type="button" class="' + classes + '"' +
+          ' data-start="' + start + '"' +
+          (disabled ? " disabled" : "") +
+          '>' +
+          slotLabel(start) +
+          '<small>' + label + '</small>' +
+          '</button>';
+
+      }
+
+      document.getElementById("slotGrid").innerHTML = html;
+    }
+
+
+    /* =========================================
+       6. DISPLAY TABLE MAP
+    ========================================= */
+
+    function showTableMap() {
+
+      var dateText = document.getElementById("diningDate").value;
+
+      var html = "";
+
+      for (var i = 0; i < tables.length; i++) {
+
+        var table = tables[i];
+
+        var cssClass = "table-card";
+        var label = "Free";
+
+        if (selectedSlot !== null) {
+
+          if (isTableBooked(table.id, dateText, selectedSlot)) {
+            cssClass += " booked";
+            label = "Booked";
+          }
+
+          if (allocatedTable === table.id) {
+            cssClass = "table-card yours";
+            label = "Yours";
+          }
+
+        }
+
+        html +=
+          '<div class="' + cssClass + '">' +
+          '<strong>T' + table.id + '</strong>' +
+          table.seats + ' seats<br>' +
+          label +
+          '</div>';
+
+      }
+
+      document.getElementById("tableMap").innerHTML = html;
+    }
+
+
+    /* =========================================
+       7. UPDATE TABLE ALLOCATION
+    ========================================= */
+
+    function updateAllocation() {
+
+      var dateText = document.getElementById("diningDate").value;
+      var party = Number(document.getElementById("partySize").value);
+
+      var box = document.getElementById("allocation");
+
+      if (selectedSlot === null) {
+
+        allocatedTable = null;
+
+        box.innerText =
+          "Choose a time slot to see your table.";
+
+        return;
+      }
+
+      if (isPastSlot(dateText, selectedSlot)) {
+
+        allocatedTable = null;
+
+        box.innerText =
+          "This time slot has already passed. Choose another slot.";
+
+        return;
+      }
+
+      allocatedTable = findTable(dateText, selectedSlot, party);
+
+      if (allocatedTable === null) {
+
+        box.innerText =
+          "Sorry, no table is available at " +
+          slotLabel(selectedSlot) +
+          ". Please choose another slot.";
+
+      } else {
+
+        box.innerText =
+          "Table " + allocatedTable +
+          " (" + seatsOf(allocatedTable) + " seats) is available for you from " +
+          slotLabel(selectedSlot) + " to " +
+          slotLabel(selectedSlot + DINING_MINUTES) + ".";
+
+      }
+
+    }
+
+
+    function refreshAll() {
+
+      var dateText = document.getElementById("diningDate").value;
+      var party = Number(document.getElementById("partySize").value);
+
+      if (
+        selectedSlot !== null &&
+        (
+          isPastSlot(dateText, selectedSlot) ||
+          findTable(dateText, selectedSlot, party) === null
+        )
+      ) {
+        selectedSlot = null;
+      }
+
+      updateAllocation();
+      showSlots();
+      showTableMap();
+
+    }
+
+
+    /* =========================================
+       8. READ PRE-ORDER FROM MENU PAGE
+    ========================================= */
+
+    function getPreOrder() {
+
+      var order = readStorage("preOrder", null);
+
+      if (!order || !Array.isArray(order.items)) {
+        return null;
+      }
+
+      var items = [];
+
+      for (var i = 0; i < order.items.length; i++) {
+
+        var item = order.items[i];
+
+        var name = String(item.name || "").trim();
+        var quantity = Number(item.quantity);
+
+        if (!name || !Number.isFinite(quantity) || quantity <= 0) {
+          continue;
+        }
+
+        var price = Number(item.price);
+
+        if (!Number.isFinite(price) || price < 0) {
+          continue;
+        }
+
+        items.push({
+          id: item.id,
+          name: name,
+          price: price,
+          quantity: quantity,
+          amount: price * quantity,
+          prep: dishPrepTimes[name] || 15
+        });
+
+      }
+
+      if (items.length === 0) {
+        return null;
+      }
+
+      var subtotal = items.reduce(function(total, item) {
+        return total + item.amount;
+      }, 0);
+
+      var gst = Number(order.gst);
+      var serviceCharge = Number(order.serviceCharge);
+
+      if (!Number.isFinite(gst)) {
+        gst = subtotal * 0.05;
+      }
+
+      if (!Number.isFinite(serviceCharge)) {
+        serviceCharge = subtotal * 0.10;
+      }
+
+      var total = Number(order.total);
+
+      if (!Number.isFinite(total)) {
+        total = subtotal + gst + serviceCharge;
+      }
+
+      return {
+        items: items,
+        notes: String(order.notes || ""),
+        subtotal: subtotal,
+        gst: gst,
+        serviceCharge: serviceCharge,
+        total: total
+      };
+
+    }
+
+
+    /* =========================================
+       9. DISPLAY PRE-ORDER SUMMARY
+    ========================================= */
+
+    function showOrderSummary() {
+
+      var order = getPreOrder();
+
+      var box = document.getElementById("orderSummary");
+
+      if (!order) {
+
+        box.innerHTML =
+          '<p class="muted">' +
+          'You have not selected any dishes yet. ' +
+          '<a href="menu.html">Visit the menu</a> to pre-order food. ' +
+          'You can also reserve a table without ordering.' +
+          '</p>';
+
+        return;
+      }
+
+      var html = "";
+
+      for (var i = 0; i < order.items.length; i++) {
+
+        var item = order.items[i];
+
+        html +=
+          '<div class="summary-row">' +
+          '<span>' + escapeHTML(item.quantity) +
+          ' x ' + escapeHTML(item.name) + '</span>' +
+          '<span>₹' + item.amount.toFixed(2) + '</span>' +
+          '</div>';
+
+      }
+
+      html +=
+        '<div class="summary-row">' +
+        '<span>Subtotal</span>' +
+        '<span>₹' + order.subtotal.toFixed(2) + '</span>' +
+        '</div>';
+
+      html +=
+        '<div class="summary-row">' +
+        '<span>GST</span>' +
+        '<span>₹' + order.gst.toFixed(2) + '</span>' +
+        '</div>';
+
+      html +=
+        '<div class="summary-row">' +
+        '<span>Service Charge</span>' +
+        '<span>₹' + order.serviceCharge.toFixed(2) + '</span>' +
+        '</div>';
+
+      html +=
+        '<div class="summary-row summary-total">' +
+        '<span>Total</span>' +
+        '<span>₹' + order.total.toFixed(2) + '</span>' +
+        '</div>';
+
+      if (order.notes) {
+
+        html +=
+          '<p class="muted" style="margin-top:10px;">' +
+          '<strong>Kitchen Note:</strong> ' +
+          escapeHTML(order.notes) +
+          '</p>';
+
+      }
+
+      html +=
+        '<p class="muted" style="margin-top:10px;">' +
+        '<a href="menu.html">Change my order</a>' +
+        '</p>';
+
+      box.innerHTML = html;
+
+    }
+
+
+    /* =========================================
+       10. TIME SLOT CLICK
+    ========================================= */
+
+    document.getElementById("slotGrid").addEventListener("click", function(event) {
+
+      var button = event.target.closest(".slot");
+
+      if (!button || button.disabled) {
+        return;
+      }
+
+      selectedSlot = Number(button.getAttribute("data-start"));
+
+      document.getElementById("errorText").innerText = "";
+
+      refreshAll();
+
+    });
+
+
+    /* =========================================
+       11. DATE AND PARTY SIZE CHANGES
+    ========================================= */
+
+    document.getElementById("diningDate").addEventListener("change", function() {
+
+      selectedSlot = null;
+
+      document.getElementById("errorText").innerText = "";
+
+      refreshAll();
+
+    });
+
+
+    document.getElementById("partySize").addEventListener("change", function() {
+
+      document.getElementById("errorText").innerText = "";
+
+      refreshAll();
+
+    });
+
+
+    /* =========================================
+       12. FORM SUBMISSION
+    ========================================= */
+
+    document.getElementById("bookingForm").addEventListener("submit", function(event) {
+
+      event.preventDefault();
+
+      var name = document.getElementById("guestName").value.trim();
+
+      var phone = document.getElementById("guestPhone").value.trim();
+
+      var party = Number(document.getElementById("partySize").value);
+
+      var dateText = document.getElementById("diningDate").value;
+
+      var error = document.getElementById("errorText");
+
+
+      /* VALIDATION */
+
+      if (name === "") {
+        error.innerText = "Please enter your name.";
+        return;
+      }
+
+      if (!/^[0-9]{10}$/.test(phone)) {
+        error.innerText = "Please enter a valid 10-digit mobile number.";
+        return;
+      }
+
+      if (dateText === "") {
+        error.innerText = "Please choose a reservation date.";
+        return;
+      }
+
+      if (dateText < todayString()) {
+        error.innerText = "You cannot reserve a date in the past.";
+        return;
+      }
+
+      if (selectedSlot === null) {
+        error.innerText = "Please choose a time slot.";
+        return;
+      }
+
+      if (isPastSlot(dateText, selectedSlot)) {
+        error.innerText = "This time slot has already passed.";
+        refreshAll();
+        return;
+      }
+
+
+      /*
+        Load the latest reservations again before
+        allocating a table.
+      */
+
+      loadReservations();
+
+      var tableId = findTable(dateText, selectedSlot, party);
+
+      if (tableId === null) {
+
+        error.innerText =
+          "Sorry, that table is no longer available. Please choose another slot.";
+
+        refreshAll();
+
+        return;
+      }
+
+
+      error.innerText = "";
+
+
+      /* READ THE PRE-ORDER */
+
+      var order = getPreOrder();
+
+
+      /* CREATE UNIQUE BOOKING ID */
+
+      var bookingId =
+        "SS-" + Date.now().toString().slice(-8);
+
+
+      /* CREATE RESERVATION OBJECT */
+
+      var reservation = {
+
+        id: bookingId,
+
+        name: name,
+
+        phone: phone,
+
+        date: dateText,
+
+        start: selectedSlot,
+
+        table: tableId,
+
+        party: party,
+
+        status: "pending",
+
+        total: order ? order.total : 0,
+
+        items: order ? order.items.map(function(item) {
+          return {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            amount: item.amount,
+            prep: item.prep
+          };
+        }) : [],
+
+        notes: order ? order.notes : "",
+
+        createdAt: Date.now()
+
+      };
+
+
+      /*
+        Convert the selected booking time into a
+        local timestamp for the Kitchen screen.
+      */
+
+      var arrivalTime = makeDate(
+        dateText,
+        selectedSlot
+      ).getTime();
+
+
+      /* SAVE RESERVATION */
+
+      reservations.push(reservation);
+
+      try {
+
+        saveReservations();
+
+        /*
+          CREATE KITCHEN TICKET ONLY IF THERE
+          IS A PRE-ORDER.
+        */
+
+        if (order) {
+
+          var kitchenTickets = readStorage("kitchenTickets", []);
+
+          if (!Array.isArray(kitchenTickets)) {
+            kitchenTickets = [];
+          }
+
+          var kitchenTicket = {
+
+            id: bookingId,
+
+            bookingId: bookingId,
+
+            table: tableId,
+
+            guest: name,
+
+            arrival: arrivalTime,
+
+            arrived: false,
+
+            status: "pending",
+
+            notes: order.notes,
+
+            items: order.items.map(function(item) {
+
+              return {
+                name: item.name,
+                qty: item.quantity,
+                prep: item.prep
+              };
+
+            })
+
+          };
+
+          kitchenTickets.push(kitchenTicket);
+
+          localStorage.setItem(
+            "kitchenTickets",
+            JSON.stringify(kitchenTickets)
+          );
+
+          /*
+            Remove the pre-order only after
+            successfully saving the reservation
+            and kitchen ticket.
+          */
+
+          localStorage.removeItem("preOrder");
+
+        }
+
+        localStorage.setItem("lastBookingId", bookingId);
+
+      } catch (saveError) {
+
+        /*
+          Avoid showing a successful confirmation
+          if saving to browser storage fails.
+        */
+
+        reservations.pop();
+
+        try {
+          saveReservations();
+        } catch (ignored) {}
+
+        error.innerText =
+          "Unable to save your reservation. Please try again.";
+
+        console.error(saveError);
+
+        return;
+      }
+
+
+      /* SHOW CONFIRMATION */
+
+      showConfirmation(reservation);
+
+    });
+
+
+    /* =========================================
+       13. CONFIRMATION SCREEN
+    ========================================= */
+
+    function showConfirmation(r) {
+
+      var startDate = makeDate(r.date, r.start);
+
+      var endDate = makeDate(
+        r.date,
+        r.start + DINING_MINUTES
+      );
+
+      var dateLabel = formatDate(r.date);
+
+      var timeLabel =
+        slotLabel(r.start) +
+        " - " +
+        slotLabel(r.start + DINING_MINUTES);
+
+
+      document.getElementById("cId").innerText = r.id;
+
+      document.getElementById("cName").innerText = r.name;
+
+      document.getElementById("cTable").innerText =
+        "Table " + r.table;
+
+      document.getElementById("cDate").innerText = dateLabel;
+
+      document.getElementById("cTime").innerText = timeLabel;
+
+      document.getElementById("cGuests").innerText =
+        r.party + " guests";
+
+      document.getElementById("cTotal").innerText =
+        r.total > 0
+          ? "₹" + Number(r.total).toFixed(2)
+          : "No pre-order";
+
+
+      /* SIMULATED SMS */
+
+      var sms =
+        "SpiceStack: Hi " + r.name +
+        ", your Table " + r.table +
+        " for " + r.party +
+        " guests is confirmed on " +
+        dateLabel + " at " +
+        slotLabel(r.start) +
+        ". Booking ID: " + r.id + ".";
+
+      if (r.items && r.items.length > 0) {
+        sms += " Your pre-order has been sent to the kitchen screen.";
+      }
+
+      document.getElementById("smsText").innerText = sms;
+
+
+      /* GOOGLE CALENDAR */
+
+      function calendarDate(d) {
+
+        function two(n) {
+          return (n < 10 ? "0" : "") + n;
+        }
+
+        return d.getFullYear() +
+          two(d.getMonth() + 1) +
+          two(d.getDate()) +
+          "T" +
+          two(d.getHours()) +
+          two(d.getMinutes()) +
+          "00";
+
+      }
+
+
+      var calendarLink =
+        "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+        "&text=" + encodeURIComponent(
+          "Dinner at SpiceStack - Table " + r.table
+        ) +
+        "&dates=" + calendarDate(startDate) +
+        "/" + calendarDate(endDate) +
+        "&details=" + encodeURIComponent(
+          "Booking ID: " + r.id
+        );
+
+
+      document.getElementById("calendarLink").href = calendarLink;
+
+
+      /* SWITCH SCREENS */
+
+      document.getElementById("bookingPage").style.display = "none";
+
+      document.getElementById("confirmPage").style.display = "block";
+
+      window.scrollTo(0, 0);
+
+    }
+
+
+    /* =========================================
+       14. INITIAL PAGE SETUP
+    ========================================= */
+
+    loadReservations();
+
+
+    var dateInput = document.getElementById("diningDate");
+
+    dateInput.value = todayString();
+
+    dateInput.min = todayString();
+
+
+    showOrderSummary();
+
+    refreshAll();
+
+
+    /*
+      Refresh availability if another browser tab
+      creates or changes a reservation.
+    */
+
+    window.addEventListener("storage", function(event) {
+
+      if (
+        event.key === "reservations" ||
+        event.key === null
+      ) {
+
+        loadReservations();
+
+        refreshAll();
+
+      }
+
+      if (
+        event.key === "preOrder" ||
+        event.key === null
+      ) {
+
+        showOrderSummary();
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
